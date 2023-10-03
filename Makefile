@@ -1,4 +1,5 @@
 APP=crossword-helper
+VOL=/Users/technosophos/LLMs/llama-2-7b-chat.ggmlv3.q3_K_L.bin
 
 PHONY: build
 build:
@@ -8,4 +9,4 @@ build:
 
 PHONY: run
 run:
-	docker run -i --runtime=io.containerd.spin.v1 --platform=wasi/wasm -p 3000:80 docker.io/technosophos/$(APP):latest
+	docker run -i --runtime=io.containerd.spin.v1 --platform=wasi/wasm -p 3000:80 -v /Users/technosophos/LLMs/llama-2-7b-chat.ggmlv3.q3_K_L.bin:/.spin/ai-models/llama2-chat docker.io/technosophos/$(APP):latest

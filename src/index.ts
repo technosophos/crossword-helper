@@ -31,8 +31,6 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
   return {
     status: 200,
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      "answer": res
-    })
+    body: JSON.stringify(res)
   }
 }
