@@ -1,0 +1,23 @@
+spin_manifest_version = "1"
+authors = ["Matt Butcher <matt.butcher@fermyon.com>"]
+description = ""
+name = "crossword-helper"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+[[component]]
+id = "crossword-helper"
+source = "target/crossword-helper.wasm"
+exclude_files = ["**/node_modules"]
+[component.trigger]
+# route = "/api/question"
+route = "/api/question"
+[component.build]
+command = "npm run build"
+
+#[[component]]
+#source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.3/spin_static_fs.wasm", digest = "sha256:38bf971900228222f7f6b2ccee5051f399adca58d71692cdfdea98997965fd0d" }
+#id = "fileserver"
+#files = [{ source = "assets", destination = "/" }]
+#[component.trigger]
+#route = "/..."
