@@ -1,33 +1,55 @@
 import { Llm, InferencingModels, HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
-
+const decoder = new TextDecoder()
 const model = InferencingModels.Llama2Chat
-// Prompt guide: https://huggingface.co/blog/llama2#how-to-prompt-llama-2
-const user_message = "What countries are in the EU?"
-const prompt = `
-<s>[INST] <<SYS>>
-Your are a bot that helps solve crossword puzzle clues.
-Respond with one or more suggested. A suggested answer should be less than 20 characters.
 
-What is the letter before omega?
-kappa
+/**
+ * Format a question to ask the LLM.
+ * 
+ * Prompt guide: https://huggingface.co/blog/llama2#how-to-prompt-llama-2
+ * @param question The question from the user
+ * @returns The full prompt
+ */
+function ask(question: string): string {
+  return `
+  <s>[INST] <<SYS>>
+  Your are a bot that helps solve crossword puzzle clues.
+  Respond with one or more suggestions. A suggested answer should be less than 20 characters.
 
-Who were the three stooges?
-Larry
-Moe
-Curley
-Shep
+  <</SYS>>
+  
+  ${question} [/INST]
+  `
 
-What are synonyms for walk?
-Stroll
-Meander
-Saunter
-<</SYS>>
+  /*
+  Here are three examples:
 
-${user_message} [/INST]
-`
+  Question: What is the letter before omega?
+  Answer: kappa
+  
+  Question: Who were the three stooges?
+  Answer:
+  * Larry
+  * Moe
+  * Curley
+  * Shep
+  
+  Question: What are synonyms for walk?
+  Answer:
+  * Stroll
+  * Meander
+  * Saunter
+  */
+}
+
 
 export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
-  let res = Llm.infer(model, prompt)
+  // Get the data posted from the web browser
+  let question = decoder.decode(request.body);
+
+  // Ask the LLM a question
+  let res = Llm.infer(model, ask(question), { maxTokens: 250 })
+
+  // Send the entire response back to the user
   return {
     status: 200,
     headers: { "content-type": "application/json" },
