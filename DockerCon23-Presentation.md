@@ -39,3 +39,10 @@ Spin is the open source developer tool for building serverless WebAssembly apps.
 ## Over to some Code
 
 We're going to play with a crossword puzzle helper.
+
+--
+
+## Ready to Build Your Own?
+
+* Try it at https://developer.fermyon.com/spin
+* This demo is at https://github.com/technosophos/crossword-helper
