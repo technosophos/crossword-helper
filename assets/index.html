@@ -21,7 +21,7 @@
             fetch("/api/question", { method: "POST", body: prompt }).then(response => response.json()).then(data => {
                 console.log("heard back from server")
                 document.getElementById("prompt").placeholder = "🦙 The llama has spoken"
-                document.getElementById("response").innerHTML = '<pre>' + data.text + '</pre>'
+                document.getElementById("response").innerHTML = '<pre>\n' + data.text + '</pre>'
             })
 
         }

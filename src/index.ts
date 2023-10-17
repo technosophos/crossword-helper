@@ -19,26 +19,6 @@ function ask(question: string): string {
   
   ${question} [/INST]
   `
-
-  /*
-  Here are three examples:
-
-  Question: What is the letter before omega?
-  Answer: kappa
-  
-  Question: Who were the three stooges?
-  Answer:
-  * Larry
-  * Moe
-  * Curley
-  * Shep
-  
-  Question: What are synonyms for walk?
-  Answer:
-  * Stroll
-  * Meander
-  * Saunter
-  */
 }
 
 

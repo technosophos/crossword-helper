@@ -36,9 +36,9 @@ Spin is the open source developer tool for building serverless WebAssembly apps.
 
 ---
 
-## Over to some Code
+## Crossword Puzzles
 
-We're going to play with a crossword puzzle helper.
+Let's take a look at our crossword helper.
 
 ---
 
