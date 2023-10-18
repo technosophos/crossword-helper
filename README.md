@@ -16,6 +16,11 @@ You can run this app in three ways:
 
 1. You can run locally with `spin build --up` or `spin up`
 2. You can build it into a Docker image (`make build`) and run it in Docker Desktop (`make run`)
-3. You can run it in Fermyon Cloud `spin build && spin deploy`
+3. You can run it in Fermyon Cloud:
+```bash
+npm install
+npm run build
+spin deploy
+```
 
-If you run it locally, it will use CPU for infere
+If you run it locally, it will use CPU for inferencing.
