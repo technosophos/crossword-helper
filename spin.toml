@@ -24,5 +24,6 @@ component = "helper"
 source = "target/crossword-helper.wasm"
 exclude_files = ["**/node_modules"]
 ai_models = ["llama2-chat"]
+key_value_stores = ["default"]
 [component.helper.build]
 command = "npm run build"
