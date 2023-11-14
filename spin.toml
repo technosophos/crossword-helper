@@ -1,25 +1,28 @@
-spin_manifest_version = "1"
+spin_manifest_version = 2
+
+[application]
 authors = ["Matt Butcher <matt.butcher@fermyon.com>"]
 description = ""
 name = "crossword-helper"
-trigger = { type = "http", base = "/" }
-version = "0.1.0"
+version = "1.1.0"
+
+[[trigger.http]]
+route = "/..."
+component = "fileserver"
+
+# This serves the static files (HTML, CSS, etc.)
+[component.fileserver]
+source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.3/spin_static_fs.wasm", digest = "sha256:38bf971900228222f7f6b2ccee5051f399adca58d71692cdfdea98997965fd0d" }
+files = [{ source = "assets", destination = "/" }]
+
+[[trigger.http]]
+route = "/api/question"
+component = "helper"
 
 # This is our function
-[[component]]
-id = "crossword-helper"
+[component.helper]
 source = "target/crossword-helper.wasm"
 exclude_files = ["**/node_modules"]
 ai_models = ["llama2-chat"]
-[component.trigger]
-route = "/api/question"
-[component.build]
+[component.helper.build]
 command = "npm run build"
-
-# This serves the static files (HTML, CSS, etc.)
-[[component]]
-source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v0.0.3/spin_static_fs.wasm", digest = "sha256:38bf971900228222f7f6b2ccee5051f399adca58d71692cdfdea98997965fd0d" }
-id = "fileserver"
-files = [{ source = "assets", destination = "/" }]
-[component.trigger]
-route = "/..."
