@@ -8,20 +8,29 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script>
+        // Get a session.
+        var session = ""
+        fetch("/api/question").then(response => response.json()).then(data => { session = data.id })
+
         function infer(e) {
             console.log("hello")
             const prompt = document.getElementById("prompt").value
             if (prompt == "") { return }
             console.log(prompt)
-            document.getElementById("response").innerHTML = ""
+            //document.getElementById("response").innerHTML = ""
             document.getElementById("question").innerHTML = "<h2>Question: " + prompt + "</h2>"
             document.getElementById("prompt").value = ""
             document.getElementById("prompt").placeholder = "Waiting for the Llama... 🦙"
-            console.log("sending query to server")
-            fetch("/api/question", { method: "POST", body: prompt }).then(response => response.json()).then(data => {
+            console.log("sending query to server with ID " + session)
+            fetch("/api/question/" + session, { method: "POST", body: prompt }).then(response => response.json()).then(data => {
                 console.log("heard back from server")
+                console.log(data)
                 document.getElementById("prompt").placeholder = "🦙 The llama has spoken"
-                document.getElementById("response").innerHTML = '<pre>\n' + data.text + '</pre>'
+
+                // Just print the last item in the array
+                i = data.length - 1
+                document.getElementById("response").insertAdjacentHTML("afterend", '<h3>' + data[i].question + '</h3><pre>\n' + data[i].answer + '</pre>')
+
             })
 
         }

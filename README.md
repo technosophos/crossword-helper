@@ -4,9 +4,11 @@ Sometimes you need _help_ with your crossword clues, but don't just want the ans
 
 This is a Spin app that can help you solve crossword puzzles. This probably won't help you get the exact answer to your puzzle, but it will help provide some background or synonyms or possibilities.
 
+> We livecoded part of this during a [Spin Live Code Tuesdays](https://www.youtube.com/live/aZRd0BAmZWE?si=2j3k2zttq6kFZdfS)
+
 ## Prerequisites
 
-* Spin 1.5 or later
+* Spin 2.0 or later
 * One of the LLaMa2-Chat models. Locally, the 7b param model is best unless you have a custom-built Spin. (Fermyon Cloud uses the 13b param version)
     * Your model must be stored exactly here: `$THIS_DIRECTORY/.spin/ai-models/llama2-chat` (where $THIS_DIRECTORY is the directory the `spin.toml` is located)
 * For Docker Desktop support, you need Docker Desktop version 24 or later.
@@ -23,4 +25,13 @@ npm run build
 spin deploy
 ```
 
-If you run it locally, it will use CPU for inferencing.
+If you run it locally, it will use CPU for inferencing unless you have custom-built Spin with the appropriate driver.
+
+## About the App
+
+This uses the following Spin features:
+
+* The JS/TS SDK
+* Key Value Store
+* The JS/TS Router
+* Fermyon Serverless AI

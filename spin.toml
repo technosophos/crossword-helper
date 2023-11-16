@@ -16,7 +16,7 @@ source = { url = "https://github.com/fermyon/spin-fileserver/releases/download/v
 files = [{ source = "assets", destination = "/" }]
 
 [[trigger.http]]
-route = "/api/question"
+route = "/api/question/..."
 component = "helper"
 
 # This is our function

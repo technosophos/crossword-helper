@@ -1,6 +1,15 @@
-import { Kv, Llm, InferencingModels, HandleRequest, HttpRequest, HttpResponse } from "@fermyon/spin-sdk"
+import { Kv, Llm, InferencingModels, HandleRequest, HttpRequest, HttpResponse, Router } from "@fermyon/spin-sdk"
+import { factory } from "ulid"
+
+
+
+// This is for decoding the body
 const decoder = new TextDecoder()
+
+// We'll use LLaMa2 Chat
 const model = InferencingModels.Llama2Chat
+
+// This is the system prompt. It will get used in a few places.
 const sysprompt = `
 <<SYS>>
   Your are an assistant who helps solve crossword puzzle clues.
@@ -33,19 +42,42 @@ function reconstruct(instances: Inst[]): string {
   return prompt
 }
 
-/*
-QUESTION 1: <SYS>FIRST
-STORE FIRST KV
-QUESTION 2: INST SYS FIRST /INST ANSWER INST SECOND
-*/
 
 
-export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
+/**
+ * Create the session
+ * @returns A ULID in a JSON body of an HttpResponse
+ */
+function startSession(): HttpResponse {
+  // By default, ulid tries to use a stronger RNG.
+  // But QuickJS doesn't have one, so we use Math.random.
+  // This is not a good idea if you need cryptographically secure
+  // random numbers. But is fine for this app.
+  let ulid = factory(Math.random)
+  let id = ulid()
+  return {
+    status: 200,
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ id: id })
+  }
+}
+
+function handleQuestion(body: ArrayBuffer, session: string) {
+
+  // Trap the case where there is no ID and return an error:
+  if (session == null) {
+    return {
+      status: 500,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ message: "Invalid ID" })
+    }
+  }
+
+  console.log(session)
+  //console.log(body)
+
   // Get the data posted from the web browser
-  let question = decoder.decode(request.body);
-
-  // ULID would be a good key
-  let session = "session" // Share a session key with the HTML page
+  let question = decoder.decode(body);
   let store = Kv.openDefault()
   var prompt = ""
   if (store.exists(session)) {
@@ -80,7 +112,7 @@ export const handleRequest: HandleRequest = async function (request: HttpRequest
   return {
     status: 200,
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(res)
+    body: JSON.stringify(current)
   }
 }
 
@@ -89,3 +121,16 @@ class Inst {
   question: string = ""
   answer: string = ""
 }
+
+export const handleRequest: HandleRequest = async function (request: HttpRequest): Promise<HttpResponse> {
+  let base = request.headers["spin-component-route"]
+  // We're going to register two routes:
+  // * One generates a ULID
+  // * One does an inference
+  const router = Router()
+  router.get(base, startSession)
+  router.post(base + "/:id", (request, body) => { return handleQuestion(body, request.params.id) })
+  return await router.handleRequest(request, request.body)
+}
+
+
