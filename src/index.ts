@@ -30,14 +30,17 @@ function ask(question: string): string {
   <s>[INST] 
   ${sysprompt}
   ${question} [/INST]
+  </s>
   `
 }
 
 function reconstruct(instances: Inst[]): string {
-  var prompt = `<s>[INST]${sysprompt}[/INST]`
+  var prompt = `<s> [INST] ${sysprompt} [/INST] </s>`
   for (let i = 0; i < instances.length; i++) {
     let inst = instances[i];
-    prompt += `[INST]${inst.question}[/INST]${inst.answer}`
+    prompt += `<s>
+    [INST] ${inst.question} [/INST] ${inst.answer}
+    </s>`
   }
   return prompt
 }
