@@ -18,7 +18,7 @@
             if (prompt == "") { return }
             console.log(prompt)
             //document.getElementById("response").innerHTML = ""
-            document.getElementById("question").innerHTML = "<h2>Question: " + prompt + "</h2>"
+            document.getElementById("question").innerHTML = "<h2>Last Question: " + prompt + "</h2><hr>"
             document.getElementById("prompt").value = ""
             document.getElementById("prompt").placeholder = "Waiting for the Llama... 🦙"
             console.log("sending query to server with ID " + session)
